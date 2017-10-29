@@ -17,10 +17,19 @@ Route::get('/', function () {
     return view('entrance');
 });
 
-// Moduel: Appuser
+// Module: Appuser Controller
 Route::post('appusers/create', function(\App\Http\Requests\CreateAppuser $request, \App\Appuser $Appuser) {
     $name = $request->input('name');
-    return response()->success($name);
+    $u = $Appuser->create(['name' => $name]);
+    return response()->success($u);
+});
+
+Route::get('appusers', function(Request $request, \App\Appuser $Appuser) {
+    $query = $Appuser;
+    if ($request->input('expand') == 'all') {
+        $query = $query->with('groups');
+    }
+    return response()->success($query->get());
 });
 
 // test section
