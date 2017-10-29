@@ -9,6 +9,15 @@ Frontend: AngularJS + UI Router
 Blade Template engine is not used. Once user lands the first page, all remaining pages and user interactions are done by AngularJS with backend APIs.
 
 # How to Run
+
+## assumptions
+docker is required
+
+## steps
+ - Make a new directory and enter it, say `root`
+ - Create a directory called `db_data`, this is for mariadb.
+ - Clone this repo into `root`, enter the repo and run the following command.
+ 
 ```sh
 docker-compose up
 ```
