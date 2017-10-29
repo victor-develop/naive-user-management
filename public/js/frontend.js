@@ -8,6 +8,20 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
                 url: "/main",
                 templateUrl: "/js/partials/main.html",
             })
+            .state('main.appusers', {
+                url: "/appusers",
+                abstract: true,
+                template: "<div ui-view></div>"
+            })
+            .state('main.appusers.manage', {
+                url: "/manage",
+                component: "appusers.tabular",
+                resolve: {
+                    appusers: function(AppuserService) {
+                        return AppuserService.list();
+                    }
+                }
+            })
             .state('404', {
                 url: "/404",
                 external: true
@@ -96,10 +110,67 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
         }
     */
     })
-    .factory('NoticeService', function(){
+    .factory('NoticeService', function() {
         var service = {};
         service.alert = function(info) {
             alert(info);
         };
         return service;
     })
+    .factory('RestClient', function(NoticeService, $http, $q) {
+        var service = {};
+
+        service.get = function(url) {
+            return $http.get(url)
+                .then(onSuccess, onErrors);
+        }
+        
+        return service;
+
+        // internal functions----------------------
+        function onSuccess(xhrResponse) {
+            return xhrResponse.data.data;
+        }
+        function onErrors(xhrResponse) {
+            var content = xhrResponse.data;
+            if (content.data.error_key == "validation") {
+                var msg = '';
+                var errors = xhr_response.data.data.errors;
+                for(var error_field  in errors) {
+                    msg += error_field + ': ' + errors[error_field];
+                }
+                NoticeService.alert(msg);
+            }
+            else {
+                NoticeService.alert(content.error_messages);
+            }
+            return $q.reject(content);
+        }
+    })
+    .factory('AppuserService', function(RestClient) {
+        var service = {};
+        service.list = function() {
+            return RestClient.get('/appusers');
+        }
+        service.delete = function(user) {
+            return RestClient.get('/appusers/' + user.id + '/delete');
+        }
+        return service;        
+    })
+    .component("appusers.tabular", {
+        templateUrl: "/js/partials/appusers/tabular.html",
+        bindings: {
+            'appusers': '<'
+        },
+        controller:  function(AppuserService, NoticeService) {
+            var self = this;
+            self.delete = function(user) {
+                AppuserService.delete(user)
+                .then(function(){
+                    self.appusers = self.appusers.filter(function(eachUser) {
+                        return eachUser.id != user.id;
+                    })
+                });
+            }
+        }
+    });

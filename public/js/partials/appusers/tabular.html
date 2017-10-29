@@ -1,0 +1,19 @@
+<div class="row">
+    <table class="u-full-width">
+            <thead>
+                <tr>
+                <th>Name</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="appuser in $ctrl.appusers" >
+                    <td ng-bind="appuser.name" ></td>
+                    <td>
+                        <a ui-sref="main.appusers.edit" class="button" href>Edit</a>
+                        <a ng-click="$ctrl.delete(appuser)" class="button" href>Delete</a>
+                    </td>
+                </tr>                
+            </tbody>
+    </table>
+</div>
