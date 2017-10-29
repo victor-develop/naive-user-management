@@ -32,6 +32,21 @@ Route::get('appusers', function(Request $request, \App\Appuser $Appuser) {
     return response()->success($query->get());
 });
 
+// Module: Group Controller
+Route::post('groups/create', function(\App\Http\Requests\CreateGroup $request, \App\Group $Group) {
+    $name = $request->input('name');
+    $g = $Group->create(['name' => $name]);    
+    return response()->success($g);
+});
+
+Route::get('groups', function(Request $request, \App\Group $Group) {
+    $query = $Group;
+    if ($request->input('expand') == 'all') {
+        $query = $query->with('appusers');
+    }
+    return response()->success($query->get());
+});
+
 // test section
 $genuser = function() {
     $user = new \App\Appuser;
