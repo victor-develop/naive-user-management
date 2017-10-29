@@ -11,9 +11,16 @@
 |
 */
 
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('entrance');
+});
+
+// Moduel: Appuser
+Route::post('appusers/create', function(\App\Http\Requests\CreateAppuser $request, \App\Appuser $Appuser) {
+    $name = $request->input('name');
+    return response()->success($name);
 });
 
 // test section
