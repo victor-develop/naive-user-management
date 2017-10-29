@@ -1,6 +1,6 @@
 # Naive User Management
 
-A special program assignment
+A special program assignment. You can add/edit/delete users. You can also create groups and assign them to users.
 
 # Tech Stack
 Backend: PHP Laravel 5.5
