@@ -22,9 +22,35 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
                     }
                 }
             })
-            .state('404', {
+            .state('main.appusers.edit', {
+                url: '/edit/{id}',
+                component: 'appusers.edit',
+                resolve: {
+                    appuser: function(AppuserService, $transition$) {
+                        var appuser_id = $transition$.params().id;
+                        return AppuserService.getByID(appuser_id);
+                    },
+                    groups: function(GroupService) {
+                        return GroupService.list();
+                    }
+                }
+            })
+            .state('main.appusers.create', {
+                url: '/create',
+                component: 'appusers.edit',
+                resolve: {
+                    appuser: function(AppuserService) {
+                        return AppuserService.newModel();
+                    },
+                    groups: function(GroupService) {
+                        return GroupService.list();
+                    }                    
+                }
+            })
+            .state('main.404', {
                 url: "/404",
-                external: true
+                external: true,
+                template: "<h5>Not Found.</h5>"
             });
         
         $urlRouterProvider.when('', goMain);
@@ -124,6 +150,11 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
             return $http.get(url)
                 .then(onSuccess, onErrors);
         }
+
+        service.post = function(url, data) {
+            return $http.post(url, data)
+            .then(onSuccess, onErrors);
+        }
         
         return service;
 
@@ -147,7 +178,7 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
             return $q.reject(content);
         }
     })
-    .factory('AppuserService', function(RestClient) {
+    .factory('AppuserService', function(RestClient, $q) {
         var service = {};
         service.list = function() {
             return RestClient.get('/appusers');
@@ -155,7 +186,30 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
         service.delete = function(user) {
             return RestClient.get('/appusers/' + user.id + '/delete');
         }
+        service.getByID = function(id) {
+            return RestClient.get('/appusers/' + id);
+        }
+        service.save = function(user) {
+            if (!user.id) {
+                return RestClient.post('/appusers/create', user);
+            }
+            return RestClient.post('/appusers/save', user);
+        }
+        service.newModel = function() {
+            var newOne = {
+                name: '',
+                groups: []
+            }
+            return $q.resolve(newOne);
+        }
         return service;        
+    })
+    .factory('GroupService', function(RestClient) {
+        var service = {};
+        service.list = function() {
+            return RestClient.get('/groups');
+        }
+        return service;
     })
     .component("appusers.tabular", {
         templateUrl: "/js/partials/appusers/tabular.html",
@@ -173,4 +227,37 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
                 });
             }
         }
-    });
+    })
+    .component("appusers.edit", {
+        templateUrl: "/js/partials/appusers/edit.html",
+        bindings: {
+            appuser: '<',
+            groups: '<'            
+        },
+        controller: function(AppuserService, GroupService,NoticeService, $state) {
+            var self = this;
+            self.usermeta = {
+                groups: {}
+            };
+            self.appuser.groups.forEach(function(eachGroup) {
+                self.usermeta.groups['' + eachGroup.id] = true;
+            });
+
+            self.save = function() {
+                self.appuser.groups = [];
+
+                for(var selected_group_id in self.usermeta.groups) {
+                    if (self.usermeta.groups[selected_group_id] == true) {
+                        self.appuser.groups.push(selected_group_id);
+                    }
+                }
+
+                AppuserService.save(self.appuser)
+                .then(function(response){
+                    NoticeService.alert("success!");
+                    $state.go('^.manage');
+                });
+            }
+        }
+    })
+    

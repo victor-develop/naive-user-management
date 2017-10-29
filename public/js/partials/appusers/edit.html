@@ -1,0 +1,23 @@
+<form>
+    <div class="row">
+            <div class="six columns">
+                <label for="name">Name</label>
+                <input ng-model = "$ctrl.appuser.name" class="u-full-width" type="text" placeholder="New user name" name="name" id="name_field">
+            </div>
+        </div>
+    
+        <div class="row">
+            <label for="group-selection">User Groups</label>  
+            <label ng-repeat="group in $ctrl.groups" class="group-option">
+                <input ng-model="$ctrl.usermeta.groups[''+group.id]" type="checkbox">
+                <span class="label-body" ng-bind="group.name" ></span>
+            </label>
+        </div>
+        
+        <div class="row">
+            <input 
+                ng-click="$ctrl.save()"
+                class="button-primary" type="button" value="Save User"
+            >
+        </div>   
+</form>

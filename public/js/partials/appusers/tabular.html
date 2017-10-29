@@ -1,4 +1,7 @@
 <div class="row">
+    <a ui-sref="main.appusers.create" class="button" href>New User</a>
+</div>
+<div class="row"> 
     <table class="u-full-width">
             <thead>
                 <tr>
@@ -10,7 +13,7 @@
                 <tr ng-repeat="appuser in $ctrl.appusers" >
                     <td ng-bind="appuser.name" ></td>
                     <td>
-                        <a ui-sref="main.appusers.edit" class="button" href>Edit</a>
+                        <a ui-sref="main.appusers.edit({id: appuser.id})" class="button" href>Edit</a>
                         <a ng-click="$ctrl.delete(appuser)" class="button" href>Delete</a>
                     </td>
                 </tr>                
