@@ -4,7 +4,7 @@ var frontend = angular.module('frontend', ['angular-loading-bar'])
 
         // TODO: test scripts, should be removed
         NoticeService.alert('NoticeService is ready');
-
+/*
         var u = {name: ''};
         u.name = makeid();
         var emptyu = {};
@@ -17,7 +17,7 @@ var frontend = angular.module('frontend', ['angular-loading-bar'])
         $http.post('/groups/create', g);
         $http.post('/groups/create', emptygroup);   
         
-
+*/
         
         $http.get('groups')
         .then((response) => {
@@ -26,8 +26,23 @@ var frontend = angular.module('frontend', ['angular-loading-bar'])
         .then((group_ids)=> {
             var user_withGroup = {name: '', groups: []};
             user_withGroup.name = "ug" + makeid();
-            user_withGroup.groups = getRandom(group_ids, 3);     
+            user_withGroup.groups = getRandom(group_ids, 3);
+            // test create
             $http.post('/appusers/create', user_withGroup); 
+
+            // test save
+            $http.get('appusers?expand=all')
+            .then( (xhrres) =>{
+               return xhrres.data.data;
+            })
+            .then((users)=> {
+                return users[0];
+            })
+            .then((firstUser)=>{
+                var editedUser = {name: firstUser.name, id: firstUser.id, groups:[]};
+                editedUser.groups = getRandom(group_ids, 3);
+                $http.post('/appusers/save', editedUser);
+            })
         });
 
         function makeid() {

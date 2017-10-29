@@ -23,7 +23,21 @@ Route::post('appusers/create', function(\App\Http\Requests\CreateAppuser $reques
     $u = $Appuser->create(['name' => $name]);
 
     $group_ids = $request->input('groups');
-    $u->groups()->attach($group_ids);
+    $u->groups()->sync($group_ids);
+
+    $u->load('groups');
+    return response()->success($u);
+});
+
+Route::post('appusers/save', function(\App\Http\Requests\SaveAppuser $request, \App\Appuser $Appuser) {
+    $user_id = $request->input('id');
+    $name = $request->input('name');
+    $u = $Appuser->findOrFail($user_id);
+
+    $u->name = $name;
+
+    $group_ids = $request->input('groups');
+    $u->groups()->sync($group_ids);
 
     $u->load('groups');
     return response()->success($u);
