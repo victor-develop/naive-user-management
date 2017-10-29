@@ -43,6 +43,11 @@ Route::post('appusers/save', function(\App\Http\Requests\SaveAppuser $request, \
     return response()->success($u);
 });
 
+Route::get('appusers/{id}', function($id, Request $request, \App\Appuser $Appuser) {
+    $u = $Appuser->with('groups')->findOrFail($id);
+    return response()->success($u);
+})->where('id', '[0-9]+');
+
 Route::get('appusers', function(Request $request, \App\Appuser $Appuser) {
     $query = $Appuser;
     if ($request->input('expand') == 'all') {
