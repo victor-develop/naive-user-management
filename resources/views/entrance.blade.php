@@ -38,6 +38,7 @@
                     <p>Manage your users and their groups here.</p>
                 </div>
             </div>
+            <div ui-view></div>
         </div>        
     </body>
 </html>

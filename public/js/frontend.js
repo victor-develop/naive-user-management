@@ -1,4 +1,25 @@
-var frontend = angular.module('frontend', ['angular-loading-bar'])
+var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
+    .config(function($stateProvider, $urlRouterProvider) {
+
+        $urlRouterProvider.otherwise("/404");
+
+        $stateProvider
+            .state('main', {
+                url: "/main",
+                templateUrl: "/js/partials/main.html",
+            })
+            .state('404', {
+                url: "/404",
+                external: true
+            });
+        
+        $urlRouterProvider.when('', goMain);
+        $urlRouterProvider.when('/', goMain);
+        function goMain($state, $match) {
+            $state.go('main');
+        }
+        
+    })    
     .controller('MainCtrl', function(NoticeService, $http) {
         var self = this;
 
