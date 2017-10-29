@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+// test section
+Route::get('/test/macro/success', function () {
+    return response()->success();
+});
+
+Route::get('/test/macro/error', function () {
+    return response()->errors(['something wrong']);
+});
