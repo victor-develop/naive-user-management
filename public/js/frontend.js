@@ -3,8 +3,7 @@ var frontend = angular.module('frontend', ['angular-loading-bar'])
         var self = this;
 
         // TODO: test scripts, should be removed
-        NoticeService.alert('NoticeService is ready');
-/*
+    /*
         var u = {name: ''};
         u.name = makeid();
         var emptyu = {};
@@ -17,7 +16,7 @@ var frontend = angular.module('frontend', ['angular-loading-bar'])
         $http.post('/groups/create', g);
         $http.post('/groups/create', emptygroup);   
         
-*/
+
         
         $http.get('groups')
         .then((response) => {
@@ -74,6 +73,7 @@ var frontend = angular.module('frontend', ['angular-loading-bar'])
                 alert("wrong!");
             }
         }
+    */
     })
     .factory('NoticeService', function(){
         var service = {};

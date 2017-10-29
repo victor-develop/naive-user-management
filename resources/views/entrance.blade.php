@@ -7,6 +7,11 @@
 
         <title>Naive User Management</title>
 
+        <!-- CSS
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link rel="stylesheet" href="/Skeleton-2.0.4/css/normalize.css">
+        <link rel="stylesheet" href="/Skeleton-2.0.4/css/skeleton.css">
+
         <!-- Angular -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular-sanitize.min.js"></script>
@@ -14,6 +19,9 @@
         <!-- Angular HTTP Loading bar -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js"></script>
+
+        <!-- Angular UI Router -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
 
         <!-- Application Logic -->
         <script src="/js/frontend.js"></script>
@@ -23,6 +31,13 @@
         </style>
     </head>
     <body>
-        <h1>User Management</h1>
+        <div class="container">
+            <div class="row">
+                <div class="one-half column" style="margin-top: 15%">
+                    <h4>User Management</h4>
+                    <p>Manage your users and their groups here.</p>
+                </div>
+            </div>
+        </div>        
     </body>
 </html>
