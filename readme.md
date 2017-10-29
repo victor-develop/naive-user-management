@@ -2,6 +2,12 @@
 
 A special program assignment
 
+# Tech Stack
+Backend: PHP Laravel 5.5
+Frontend: AngularJS + UI Router
+
+Blade Template engine is not used. Once user lands the first page, all remaining pages and user interactions are done by AngularJS with backend APIs.
+
 # How to Run
 ```sh
 docker-compose up
