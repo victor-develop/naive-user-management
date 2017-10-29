@@ -55,9 +55,11 @@ Then go to `localhost:3000`
     {
         "success": true/false,
         "data": {
+            // requested data will be placed here, depending on the API
+            // the following two fields will not exist if success == true 
             "error_key": "string",
             "errors": {
-                // content of details, can be customized for each request
+                // content of details, can be customized for each API
             }
         },
         //general error message, will not exist if success == true
@@ -66,3 +68,231 @@ Then go to `localhost:3000`
         ]
     }      
 ```
+## Sample Request and Responses
+
+### /appusers
+ - /appusers?expand=all: GET, a full list of appusers, if expand=all is appended, its related groups will be returned together
+  ```javascript
+    {
+    "success": true,
+    "data": [
+        {
+        "id": 23,
+        "name": "Amic",
+        "created_at": "2017-10-29 17:05:17",
+        "updated_at": "2017-10-29 17:05:17",
+        "groups": []
+        },
+        {
+        "id": 24,
+        "name": "Tobic",
+        "created_at": "2017-10-29 17:05:27",
+        "updated_at": "2017-10-29 17:05:27",
+        "groups": [
+            {
+            "id": 3,
+            "name": "administrator",
+            "created_at": "2017-10-29 15:59:30",
+            "updated_at": "2017-10-29 15:59:30",
+            "pivot": {
+                "appuser_id": 24,
+                "group_id": 3,
+                "created_at": "2017-10-29 17:05:27",
+                "updated_at": "2017-10-29 17:05:27"
+            }
+            },
+            {
+            "id": 7,
+            "name": "reporters",
+            "created_at": "2017-10-29 16:00:44",
+            "updated_at": "2017-10-29 16:00:44",
+            "pivot": {
+                "appuser_id": 24,
+                "group_id": 4,
+                "created_at": "2017-10-29 17:05:27",
+                "updated_at": "2017-10-29 17:05:27"
+            }
+            }
+        ]
+        }
+    ]
+    }  
+  ```
+
+ - /appusers/save: POST, edit an existed user
+  - POST Data
+  ```javascript
+    {
+        id: 23
+        name: "Amic Trump",
+        // group ids
+        groups: [
+            1,
+            7,
+            9
+        ]
+    }
+  ```
+  - Response
+  ```javascript
+  {
+        "success": true,
+        "data": {
+            "id": 23,
+            "name": "Amic Trump",
+            "created_at": "2017-10-29 16:25:19",
+            "updated_at": "2017-10-29 16:25:19",
+            "groups": [{
+                "id": 1,
+                "name": "random_group798169836",
+                "created_at": "2017-10-29 15:58:27",
+                "updated_at": "2017-10-29 15:58:27",
+                "pivot": {
+                    "appuser_id": 8,
+                    "group_id": 1,
+                    "created_at": "2017-10-29 21:54:22",
+                    "updated_at": "2017-10-29 21:54:22"
+                }
+            }, {
+                "id": 2,
+                "name": "random_group1346310833",
+                "created_at": "2017-10-29 15:59:10",
+                "updated_at": "2017-10-29 15:59:10",
+                "pivot": {
+                    "appuser_id": 8,
+                    "group_id": 2,
+                    "created_at": "2017-10-29 21:54:22",
+                    "updated_at": "2017-10-29 21:54:22"
+                }
+            }]
+        }
+    }
+  ```
+
+ - /appusers/create: POST, add an new user
+  - POST Data
+  ```javascript
+      {
+        name: "Micheal Trump",
+        // group ids
+        groups: [
+            2,
+            9
+        ]
+    }
+  ```
+  - Response
+  The same as response in `/appusers/save`
+
+ - /appusers/{id}: GET, retreieve detail of a specific user
+  ```javascript
+    {
+    "success": true,
+    "data": {
+        "id": 24,
+        "name": "ugh85j47u4ctZ5",
+        "created_at": "2017-10-29 17:05:27",
+        "updated_at": "2017-10-29 17:05:27",
+        "groups": [
+        {
+            "id": 1,
+            "name": "random_group798169836",
+            "created_at": "2017-10-29 15:58:27",
+            "updated_at": "2017-10-29 15:58:27",
+            "pivot": {
+            "appuser_id": 24,
+            "group_id": 1,
+            "created_at": "2017-10-29 17:05:27",
+            "updated_at": "2017-10-29 17:05:27"
+            }
+        },
+        {
+            "id": 4,
+            "name": "random_group1017008722",
+            "created_at": "2017-10-29 16:00:44",
+            "updated_at": "2017-10-29 16:00:44",
+            "pivot": {
+            "appuser_id": 24,
+            "group_id": 4,
+            "created_at": "2017-10-29 17:05:27",
+            "updated_at": "2017-10-29 17:05:27"
+            }
+        }
+        ]
+    }
+    }    
+  ```
+
+ - /appusers/{id}/delete: GET, delete a specific user
+  ```javascript
+  {"success":true,"data":[]}
+  ```
+
+### /groups
+ - /groups?expand=all: GET, a full list of groups, if expand=all is appended, users of each group will be returned together
+ - /groups/create: POST, add an new group
+  - POST Data
+   ```javascript
+   {
+       name: 'Secretary'
+   }
+  ```
+  - Response
+  ```javascript
+    {"success":true,"data":{"name":"Secretary","updated_at":"2017-10-29 22:00:23","created_at":"2017-10-29 22:00:23","id":20}}
+  ```  
+  
+ - /groups/{id}: GET, retreieve detail of a specific group
+   ```javascript
+    {
+    "success": true,
+    "data": {
+        "id": 4,
+        "name": "random_group1017008722",
+        "created_at": "2017-10-29 16:00:44",
+        "updated_at": "2017-10-29 16:00:44",
+        "appusers": [
+        {
+            "id": 24,
+            "name": "random_user_ugh85j47u4ctZ5",
+            "created_at": "2017-10-29 17:05:27",
+            "updated_at": "2017-10-29 17:05:27",
+            "pivot": {
+            "group_id": 4,
+            "appuser_id": 24,
+            "created_at": "2017-10-29 17:05:27",
+            "updated_at": "2017-10-29 17:05:27"
+            }
+        },
+        {
+            "id": 27,
+            "name": "random_user_ugTbSUnTlTfMrW",
+            "created_at": "2017-10-29 17:18:41",
+            "updated_at": "2017-10-29 17:18:41",
+            "pivot": {
+            "group_id": 4,
+            "appuser_id": 27,
+            "created_at": "2017-10-29 17:18:41",
+            "updated_at": "2017-10-29 17:18:41"
+            }
+        },
+        {
+            "id": 35,
+            "name": "random_user_ugwQeaAO51j9MM",
+            "created_at": "2017-10-29 17:40:02",
+            "updated_at": "2017-10-29 17:40:02",
+            "pivot": {
+            "group_id": 4,
+            "appuser_id": 35,
+            "created_at": "2017-10-29 17:40:02",
+            "updated_at": "2017-10-29 17:40:02"
+            }
+        }
+        ]
+    }
+    } 
+  ```
+ - /groups/{id}/delete: GET, delete a specific group
+   ```javascript
+  {"success":true,"data":[]}
+  ```
