@@ -21,6 +21,11 @@ Route::get('/', function () {
 Route::post('appusers/create', function(\App\Http\Requests\CreateAppuser $request, \App\Appuser $Appuser) {
     $name = $request->input('name');
     $u = $Appuser->create(['name' => $name]);
+
+    $group_ids = $request->input('groups');
+    $u->groups()->attach($group_ids);
+
+    $u->load('groups');
     return response()->success($u);
 });
 

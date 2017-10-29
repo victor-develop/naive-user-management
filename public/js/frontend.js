@@ -11,13 +11,24 @@ var frontend = angular.module('frontend', ['angular-loading-bar'])
         $http.post('/appusers/create', u);
         $http.post('/appusers/create', emptyu);
 
-        alert('hei!');
-
         var g = {name: ''};
         g.name = "group_" + makeid();
         var emptygroup = {};
         $http.post('/groups/create', g);
-        $http.post('/groups/create', emptygroup);       
+        $http.post('/groups/create', emptygroup);   
+        
+
+        
+        $http.get('groups')
+        .then((response) => {
+            return response.data.data.map(g => g.id);
+        })
+        .then((group_ids)=> {
+            var user_withGroup = {name: '', groups: []};
+            user_withGroup.name = "ug" + makeid();
+            user_withGroup.groups = getRandom(group_ids, 3);     
+            $http.post('/appusers/create', user_withGroup); 
+        });
 
         function makeid() {
             var text = "";
@@ -28,6 +39,20 @@ var frontend = angular.module('frontend', ['angular-loading-bar'])
           
             return text;
         }
+
+        function getRandom(arrayNum, count) {
+            // Make a copy of the array
+            var tmp = arrayNum.slice(arrayNum);
+            var ret = [];
+            
+            for (var i = 0; i < count; i++) {
+              var index = Math.floor(Math.random() * tmp.length);
+              var removed = tmp.splice(index, 1);
+              // Since we are only removing one element
+              ret.push(removed[0]);
+            }
+            return ret;  
+          }        
 
         function assert(predicate) {
             if (!predicate) {
