@@ -292,6 +292,7 @@ Then go to `localhost:3000`
     }
     } 
   ```
+  
  - /groups/{id}/delete: GET, delete a specific group
    ```javascript
   {"success":true,"data":[]}
