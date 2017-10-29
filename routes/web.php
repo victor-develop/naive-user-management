@@ -77,6 +77,20 @@ Route::get('groups', function(Request $request, \App\Group $Group) {
     return response()->success($query->get());
 });
 
+Route::get('groups/{id}', function($id, Request $request, \App\Group $Group) {
+    $group = $Group->with('appusers')->findOrFail($id);
+    return response()->success($group);
+})->where('id', '[0-9]+');
+
+Route::get('groups/{id}/delete', function($id, Request $request, \App\Group $Group) {
+    $group = $Group->with('appusers')->findOrFail($id);
+    if ($group->appusers()->count() > 0) {
+        return response()->errors(['Cannot delete a group with users assigned.']);
+    }
+    $group->delete();
+    return response()->success();
+})->where('id', '[0-9]+');
+
 // test section
 $genuser = function() {
     $user = new \App\Appuser;
