@@ -1,0 +1,15 @@
+<form>
+    <div class="row">
+            <div class="six columns">
+                <label for="name">Name</label>
+                <input ng-model = "$ctrl.group.name" class="u-full-width" type="text" placeholder="New group name" name="name" id="name_field">
+            </div>
+        </div>
+        
+        <div class="row">
+            <input 
+                ng-click="$ctrl.save()"
+                class="button-primary" type="button" value="Save User"
+            >
+        </div> 
+</form>

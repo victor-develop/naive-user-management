@@ -47,6 +47,29 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
                     }                    
                 }
             })
+            .state('main.groups', {
+                url: "/groups",
+                abstract: true,
+                template: "<div ui-view></div>"
+            })            
+            .state('main.groups.manage', {
+                url: "/manage",
+                component: "groups.tabular",
+                resolve: {
+                    groups: function(GroupService) {
+                        return GroupService.list();
+                    }
+                }
+            })
+            .state('main.groups.create', {
+                url: '/create',
+                component: 'groups.edit',
+                resolve: {
+                    group: function(GroupService) {
+                        return GroupService.newModel();
+                    }                    
+                }
+            })            
             .state('main.404', {
                 url: "/404",
                 external: true,
@@ -204,10 +227,25 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
         }
         return service;        
     })
-    .factory('GroupService', function(RestClient) {
+    .factory('GroupService', function(RestClient, $q) {
         var service = {};
         service.list = function() {
             return RestClient.get('/groups');
+        }
+        service.delete = function(group) {
+            return RestClient.get('/groups/' + group.id + '/delete');
+        }
+        service.save = function(group) {
+            if (!group.id) {
+                return RestClient.post('/groups/create', group);
+            }
+            return RestClient.post('/groups/save', group);
+        }
+        service.newModel = function() {
+            var newOne = {
+                name: ''
+            };
+            return $q.resolve(newOne);
         }
         return service;
     })
@@ -256,6 +294,39 @@ var frontend = angular.module('frontend', ['angular-loading-bar','ui.router'])
                 .then(function(response){
                     NoticeService.alert("success!");
                     $state.go('^.manage');
+                });
+            }
+        }
+    })
+    .component("groups.edit", {
+        templateUrl: "/js/partials/groups/edit.html",
+        bindings: {
+            group: '<'            
+        },
+        controller: function(GroupService,NoticeService, $state) {
+            var self = this;
+            self.save = function() {
+                GroupService.save(self.group)
+                .then(function(response){
+                    NoticeService.alert("success!");
+                    $state.go('^.manage');
+                });
+            }
+        }
+    })    
+    .component('groups.tabular', {
+        templateUrl: "/js/partials/groups/tabular.html",
+        bindings: {
+            groups: '<'
+        },
+        controller:  function(GroupService, NoticeService) {
+            var self = this;
+            self.delete = function(group) {
+                GroupService.delete(group)
+                .then(function(){
+                    self.groups = self.groups.filter(function(eachGroup) {
+                        return eachGroup.id != group.id;
+                    })
                 });
             }
         }

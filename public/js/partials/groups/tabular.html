@@ -1,0 +1,22 @@
+<div class="row">
+    <a ui-sref="main.groups.create" class="button" href>New Group</a>
+</div>
+<div class="row"> 
+    <table class="u-full-width">
+            <thead>
+                <tr>
+                <th>Name</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="group in $ctrl.groups" >
+                    <td ng-bind="group.name" ></td>
+                    <td>
+                        <a ng-click="$ctrl.delete(group)" class="button" href>Delete</a>
+                    </td>
+                </tr>                
+            </tbody>
+    </table>
+</div>
+    
