@@ -34,7 +34,7 @@
         line-height: 6.5rem;
         color: #222; }
     .navbar-link.active {
-        color: rgb(17, 94, 117); }
+        color: rgb(32, 192, 236); }
     .has-docked-nav .navbar {
         position: fixed;
         top: 0;
@@ -48,8 +48,13 @@
 
       <div class="navbar-container">
         <ul class="navbar-list">
-          <li class="navbar-item"><a ui-sref="main.appusers.manage" class="navbar-link" href>Users</a></li>
-          <li class="navbar-item"><a ui-sref="main.groups.manage" class="navbar-link" href>Groups</a></li>
+          <li class="navbar-item">
+              <a ng-class="{ active: Main.$state.includes('main.appusers') }"
+                ui-sref="main.appusers.manage" class="navbar-link" href>Users</a>
+          </li>
+          <li class="navbar-item">
+              <a ng-class="{ active: Main.$state.includes('main.groups') }" ui-sref="main.groups.manage" class="navbar-link" href>Groups</a>
+          </li>
         </ul>
       </div>
 </div>
