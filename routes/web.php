@@ -56,6 +56,12 @@ Route::get('appusers', function(Request $request, \App\Appuser $Appuser) {
     return response()->success($query->get());
 });
 
+Route::get('appusers/{id}/delete', function($id, Request $request, \App\Appuser $Appuser) {
+    $u = $Appuser->with('groups')->findOrFail($id);
+    $u->cascade_delete();
+    return response()->success();
+})->where('id', '[0-9]+');
+
 // Module: Group Controller
 Route::post('groups/create', function(\App\Http\Requests\CreateGroup $request, \App\Group $Group) {
     $name = $request->input('name');

@@ -36,7 +36,7 @@ var frontend = angular.module('frontend', ['angular-loading-bar'])
                return xhrres.data.data;
             })
             .then((users)=> {
-                return users[0];
+                return getRandom(users,1)[0];
             })
             .then((firstUser)=>{
                 var editedUser = {name: firstUser.name, id: firstUser.id, groups:[]};

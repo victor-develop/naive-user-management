@@ -11,4 +11,9 @@ class Appuser extends Model
     public function groups() {
         return $this->belongsToMany('App\Group')->withTimestamps();
     }
+
+    public function cascade_delete() {
+        $this->groups()->detach();
+        $this->delete();
+    }
 }
