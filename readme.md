@@ -21,13 +21,15 @@ Then go to `localhost:3000`
 # APIs Available
 
 ## Overview
+
+### /appusers
  - /appusers?expand=all: GET, a full list of appusers, if expand=all is appended, its related groups will be returned together
  - /appusers/save: POST, edit an existed user
  - /appusers/create: POST, add an new user
  - /appusers/{id}: GET, retreieve detail of a specific user
  - /appusers/{id}/delete: GET, delete a specific user
 
- - /groups
+### /groups
  - /groups?expand=all: GET, a full list of groups, if expand=all is appended, users of each group will be returned together
  - /groups/create: POST, add an new group
  - /groups/{id}: GET, retreieve detail of a specific group
