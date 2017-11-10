@@ -17,7 +17,7 @@ class AppuserCtrl extends Controller
         return response()->success($u);
     }
 
-    public function postSave(\App\Http\Requests\SaveAppuser $request, \App\Appuser $Appuser) {
+    public function save(\App\Http\Requests\SaveAppuser $request, \App\Appuser $Appuser) {
         $user_id = $request->input('id');
         $name = $request->input('name');
         $u = $Appuser->findOrFail($user_id);
