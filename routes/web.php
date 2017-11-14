@@ -20,7 +20,9 @@ Route::get('/', function () {
 // Module: Appuser Controller
 Route::post('appusers/create', 'AppuserCtrl@postCreate');
 
-Route::post('appusers/save', 'AppuserCtrl@postSave');
+Route::post('appusers/save', 'AppuserCtrl@save');
+
+Route::put('appusers', 'AppuserCtrl@save');
 
 Route::get('appusers/{id}', 'AppuserCtrl@getView')->where('id', '[0-9]+');
 
